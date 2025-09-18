@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recipe PDF Extractor</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: #f6f8fb;
+        color: #1f2933;
+        min-height: 100vh;
+      }
+
+      header {
+        padding: 3rem 1.5rem 1rem;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      header h1 {
+        margin: 0 0 0.75rem;
+        font-size: clamp(2rem, 4vw, 2.6rem);
+      }
+
+      header p {
+        margin: 0;
+        line-height: 1.6;
+        color: #52606d;
+      }
+
+      .messages {
+        max-width: 720px;
+        margin: 0 auto 1rem;
+        padding: 1rem 1.5rem;
+        background: #fde8e8;
+        border: 1px solid #f8b4b4;
+        border-radius: 8px;
+        color: #9b1c1c;
+      }
+
+      .card {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 2.5rem 2rem;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      input[type="file"] {
+        display: block;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+      }
+
+      button {
+        background: #2563eb;
+        border: none;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        box-shadow: 0 10px 18px rgba(37, 99, 235, 0.2);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 24px rgba(37, 99, 235, 0.25);
+      }
+
+      footer {
+        text-align: center;
+        margin: 3rem 0 2rem;
+        color: #9aa5b1;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Recipe PDF Extractor</h1>
+      <p>Upload a recipe PDF and we will split the content into tidy sentences so you can drag each one into recipe categories before exporting to Word.</p>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="messages">
+          <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="card">
+      <form action="{{ url_for('extract') }}" method="post" enctype="multipart/form-data">
+        <label for="pdf">Choose a recipe PDF</label>
+        <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
+        <button type="submit">Extract recipe text</button>
+      </form>
+    </div>
+
+    <footer>
+      Works best with text-based PDFs. Scanned images will need OCR first.
+    </footer>
+  </body>
+</html>

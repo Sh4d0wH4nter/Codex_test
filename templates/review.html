@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Select Recipe Content</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 960px;
+        margin: 2rem auto;
+        padding: 0 1rem 3rem;
+        color: #222;
+      }
+      header {
+        margin-bottom: 1.5rem;
+      }
+      .messages {
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 4px;
+        background-color: #ffe9e9;
+        border: 1px solid #f5a3a3;
+        color: #8a1c1c;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .segment {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 1rem;
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .segment h2 {
+        margin: 0 0 0.5rem;
+        font-size: 1rem;
+        color: #2b7a78;
+      }
+      .segment pre {
+        white-space: pre-wrap;
+        margin: 0;
+        line-height: 1.5;
+      }
+      .actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      button {
+        background-color: #2b7a78;
+        border: none;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      button:hover {
+        background-color: #205f5d;
+      }
+      a.button-link {
+        text-decoration: none;
+        display: inline-block;
+        background-color: #e4f1f1;
+        color: #205f5d;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        border: 1px solid #c5e0df;
+      }
+      a.button-link:hover {
+        background-color: #d1e8e7;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Select the recipe text to keep</h1>
+      <p>Review the extracted sections below. Uncheck anything that is not relevant before generating the Word document.</p>
+    </header>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="messages">
+          <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('download') }}" method="post">
+      {% for segment in segments %}
+        <div class="segment">
+          <label>
+            <input type="checkbox" name="segment" value="{{ loop.index0 }}" checked>
+            <h2>Section {{ loop.index }}</h2>
+            <pre>{{ segment }}</pre>
+          </label>
+        </div>
+      {% endfor %}
+
+      <div class="actions">
+        <button type="submit">Download Word document</button>
+        <a class="button-link" href="{{ url_for('index') }}">Upload another PDF</a>
+      </div>
+    </form>
+  </body>
+</html>
